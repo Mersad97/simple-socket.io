@@ -1,34 +1,135 @@
-# React + TypeScript + Vite
+# 💬 چت‌بات چندرسانه‌ای با React و WebSocket
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+یک برنامه چت‌بات ساده و تعاملی که از **WebSocket** برای ارتباط بلادرنگ و **MUI** برای رابط کاربری زیبا استفاده می‌کند. کاربران می‌توانند پیام‌های متنی، تصاویر، فیلم‌ها و فایل‌های دیگر را ارسال و دریافت کنند.
 
-Currently, two official plugins are available:
+## ✨ ویژگی‌ها
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- ارسال و دریافت پیام‌های متنی
+- آپلود و اشتراک‌گذاری تصاویر، فیلم‌ها و فایل‌های دلخواه
+- نمایش پیام‌ها به‌صورت بلادرنگ با WebSocket
+- رابط کاربری واکنش‌گرا با استفاده از Material-UI
+- پشتیبانی از تایپ‌اسکریپت برای کدنویسی ایمن
 
-## React Compiler
+## 🛠 تکنولوژی‌ها
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+**فرانت‌اند**:
 
-Note: This will impact Vite dev & build performances.
+- React
+- TypeScript
+- Vite
+- Material-UI (MUI)
+- Socket.IO Client
 
-## Expanding the Oxlint configuration
+**بک‌اند**:
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+- Node.js
+- TypeScript
+- Express
+- Socket.IO
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+## 📋 پیش‌نیازها
+
+- Node.js (نسخه 20 یا بالاتر)
+- npm یا yarn
+- (اختیاری) متغیرهای محیطی برای تنظیم پورت‌ها
+
+## 🚀 نصب و راه‌اندازی
+
+### ۱. کلون کردن مخزن
+
+```bash
+git clone https://github.com/Mersad97/simple-socket.io.git
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+۲. نصب وابستگی‌های بک‌اند
+
+```bash
+cd backend
+npm install
+```
+
+۳. نصب وابستگی‌های فرانت‌اند
+
+```bash
+cd ../frontend
+npm install
+```
+
+۴. اجرای بک‌اند (در پوشه backend)
+
+```bash
+npm run dev
+```
+
+بک‌اند روی پورت 3000 (پیش‌فرض) اجرا می‌شود.
+
+۵. اجرای فرانت‌اند (در پوشه frontend)
+
+```bash
+npm run dev
+```
+
+فرانت‌اند روی پورت 5173 (پیش‌فرض Vite) اجرا می‌شود.
+
+نکته: مطمئن شوید که آدرس WebSocket در فرانت‌اند با آدرس بک‌اند هماهنگ است (متغیر محیطی VITE_WS_URL).
+
+📁 ساختار پروژه
+text
+chat-app/
+├── backend/
+│ ├── src/
+│ │ ├── server.ts # راه‌اندازی سرور و WebSocket
+│ │ └── ... # سایر ماژول‌ها
+│ └── package.json
+└── frontend/
+├── src/
+│ ├── components/ # کامپوننت‌های React (چت، نوار ابزار، ...)
+│ ├── hooks/ # هوک‌های سفارشی (مثلاً useWebSocket)
+│ ├── types/ # تعاریف تایپ‌های تایپ‌اسکریپت
+│ └── src/App.tsx
+└── package.json
+
+```
+
+🔌 مستندات WebSocket
+اتصال WebSocket بر روی آدرس /socket.io برقرار می‌شود. رویدادهای اصلی:
+
+# رویداد (از کلاینت)	توضیح
+# send-message	ارسال پیام جدید (شامل متن، فایل یا هر دو)
+# typing	اعلان تایپ کردن کاربر
+
+# رویداد (از سرور)	توضیح
+# receive-message	دریافت پیام جدید از سایر کاربران
+# user-joined	اعلام ورود کاربر جدید
+# user-left	اعلام خروج کاربر
+# پیام‌ها شامل متادیتا مانند username, timestamp, type (متن/تصویر/فیلم) و content (متن یا URL فایل) هستند.
+
+🖥 نحوه استفاده
+
+پس از اجرای هر دو سرویس، مرورگر خود را به آدرس http://localhost:5173 باز کنید.
+
+نام کاربری خود را وارد کنید (یا به‌صورت مهمان وارد شوید).
+
+در صفحه چت، پیام خود را تایپ کنید و دکمه ارسال را بزنید.
+
+برای ارسال فایل، روی آیکون کلیپ یا آپلود کلیک کرده و فایل مورد نظر را انتخاب کنید (تصاویر، فیلم‌ها و ... پشتیبانی می‌شوند).
+
+پیام‌های دریافتی به‌صورت لحظه‌ای نمایش داده می‌شوند.
+
+🤝 مشارکت
+اگر قصد مشارکت دارید، لطفاً ابتدا یک Issue باز کنید یا Pull Request ارسال کنید. از رعایت اصول کدنویسی (ESLint + Oxlint) اطمینان حاصل کنید.
+
+📄 لایسنس
+این پروژه تحت لایسنس MIT منتشر شده است.
+
+
+
+---
+
+## جمع‌بندی
+
+متن فعلی شما **برای ریدمی کافی نیست**، اما پایه خوبی دارد. با اضافه کردن بخش‌های پیشنهادی و توضیح ویژگی‌های خاص چت‌بات، می‌توانید ریدمی جامع و حرفه‌ای داشته باشید که هم برای کاربران نهایی و هم برای توسعه‌دهندگان مفید باشد.
+
+اگر نیاز به کمک در تکمیل هر بخش دارید، خوشحال می‌شوم راهنمایی کنم.
+
+```
