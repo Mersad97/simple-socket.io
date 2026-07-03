@@ -26,8 +26,6 @@ const upload = multer({ storage, limits: { fileSize: 50 * 1024 * 1024 } });
 
 // middleware برای پردازش فایل
 // export const uploadMessageFile = upload.single("file");
-
-// ✅ تغییر از single به any
 export const uploadMessageFile = upload.any();
 
 // کنترلر sendMessage
@@ -50,17 +48,6 @@ export const sendMessage = async (req: Request, res: Response) => {
       req.files && Array.isArray(req.files) && req.files.length > 0 ? req.files[0] : null;
 
     let fileData = {};
-    // if (req.file) {
-    //   const fileUrl = `/api/files/${req.file.filename}`;
-    //   fileData = {
-    //     fileUrl,
-    //     fileName: req.file.originalname,
-    //     mimeType: req.file.mimetype,
-    //     fileSize: req.file.size,
-    //     content: req.file.originalname, // نام فایل به عنوان محتوا
-    //     messageType: messageType, // می‌توان از نوع فایل استفاده کرد
-    //   };
-    // }
 
     if (file) {
       const fileUrl = `/api/files/${file.filename}`;
@@ -73,11 +60,6 @@ export const sendMessage = async (req: Request, res: Response) => {
         messageType: messageType,
       };
     }
-
-    // // اگر فایل نباشد و محتوا خالی باشد، خطا
-    // if (!req.file && !content) {
-    //   return res.fail("محتوا یا فایل الزامی است", 400);
-    // }
 
     // اگر فایل نباشد و محتوا خالی باشد، خطا
     if (!file && !content) {
@@ -163,53 +145,3 @@ export const markAsRead = async (req: Request, res: Response) => {
     return res.fail("خطا در علامت‌گذاری", 500);
   }
 };
-
-// ارسال پیام متنی (و یا فایل از طریق multipart اما اینجا فقط متن)
-// export const sendMessage = async (req: Request, res: Response) => {
-//   try {
-//     const userId = req.user?.id;
-//     const { chatId, content, messageType = "TEXT" } = req.body;
-
-//     if (!chatId || !content) {
-//       return res.fail("chatId و content الزامی هستند", 400);
-//     }
-//     if (!userId) return res.fail("Unauthorized", 401);
-
-//     // بررسی عضویت
-//     const participant = await prisma.groupParticipant.findUnique({
-//       where: { chatId_userId: { chatId, userId } },
-//     });
-//     if (!participant) return res.fail("شما عضو این چت نیستید", 403);
-
-//     // ایجاد پیام
-//     const newMessage = await prisma.message.create({
-//       data: {
-//         chatId,
-//         senderId: userId,
-//         content,
-//         messageType,
-//         status: "SENT",
-//       },
-//       include: {
-//         sender: {
-//           select: { id: true, username: true, name: true, avatar: true },
-//         },
-//       },
-//     });
-
-//     // به‌روزرسانی زمان چت
-//     await prisma.chat.update({
-//       where: { id: chatId },
-//       data: { updatedAt: new Date() },
-//     });
-
-//     // ارسال از طریق socket
-//     const io = req.app.get("io");
-//     io.to(`chat:${chatId}`).emit("newMessage", newMessage);
-
-//     return res.success("پیام ارسال شد", newMessage);
-//   } catch (error) {
-//     logger.error("sendMessage error", error);
-//     return res.fail("خطا در ارسال پیام", 500);
-//   }
-// };

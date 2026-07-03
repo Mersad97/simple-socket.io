@@ -23,7 +23,6 @@ interface SidebarProps {
   handleChatCreated: (chatId: string) => void;
 }
 
-// const drawerWidth = 360;
 // const drawerWidth = Math.min(360, window?.innerWidth);
 const DRAWER_WIDTH = 360;
 
@@ -38,27 +37,6 @@ const Search = styled("div")(({ theme }) => ({
   alignItems: "center",
 }));
 
-// const SearchIconWrapper = styled("div")(({ theme }) => ({
-//   padding: theme.spacing(0, 1),
-//   height: "100%",
-//   pointerEvents: "none",
-//   display: "flex",
-//   alignItems: "center",
-//   justifyContent: "center",
-// }));
-// const SearchIconWrapper = styled("div")(({ theme }) => ({
-//   padding: theme.spacing(0, 1),
-//   height: "100%",
-//   pointerEvents: "none",
-//   display: "flex",
-//   alignItems: "center",
-//   justifyContent: "center",
-//   borderRadius: "50%",
-//   transition: theme.transitions.create("background-color"),
-//   "&:hover": {
-//     backgroundColor: theme.palette.action.hover,
-//   },
-// }));
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   width: "100%",
@@ -82,16 +60,11 @@ const Sidebar = ({
   const [settingsDialogOpen, setSettingsDialogOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  // console.log("Sidebar chats", chats);
   const filteredChats = useMemo(() => {
     if (!searchTerm.trim()) return chats; // اگر جستجو خالی است، همه را نشان بده
     const lowerTerm = searchTerm.toLowerCase().trim();
     return chats.filter(
       (chat) =>
-        // // chat.title?.toLowerCase().includes(lowerTerm) ||
-        // // chat.lastMessage?.toLowerCase().includes(lowerTerm) ||
-        // // chat.participants?.some((p) => p.name.toLowerCase().includes(lowerTerm))
-        // true
         chat?.name?.toLowerCase().includes(lowerTerm) ||
         chat.participants?.some(
           (p) =>
@@ -105,12 +78,6 @@ const Sidebar = ({
     <>
       <Drawer
         variant="permanent"
-        // sx={{
-        //   width: drawerWidth,
-        //   flexShrink: 0,
-        //   [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: "border-box" },
-        // }}
-
         sx={{
           width: { xs: "100vw", sm: DRAWER_WIDTH },
           flexShrink: 0,
@@ -141,18 +108,9 @@ const Sidebar = ({
         </Toolbar>
         <Box sx={{ px: 2, pb: 1 }}>
           <Search>
-            {/* <SearchIconWrapper>
-              <SearchIcon fontSize="small" />
-            </SearchIconWrapper> */}
-
             <IconButton size="small" sx={{ p: 0.5, color: "text.secondary" }}>
               <SearchIcon fontSize="small" />
             </IconButton>
-
-            {/* <StyledInputBase
-              placeholder="جستجوی چت‌ها..."
-              inputProps={{ "aria-label": "search" }}
-            /> */}
             <StyledInputBase
               placeholder="جستجوی چت‌ها..."
               value={searchTerm}
@@ -160,7 +118,6 @@ const Sidebar = ({
               inputProps={{ "aria-label": "search" }}
               sx={{
                 pointerEvents: "auto",
-                // borderRadius: "50%",
                 transition: "background-color 0.2s",
                 "&:hover": {
                   backgroundColor: "action.hover",
@@ -172,7 +129,6 @@ const Sidebar = ({
         <Divider />
         <Box sx={{ overflowY: "auto", flexGrow: 1, px: 1 }}>
           <ChatList
-            // chats={chats || []}
             chats={filteredChats || []}
             selectedChatId={selectedChatId}
             onSelectChat={onSelectChat}
@@ -181,33 +137,12 @@ const Sidebar = ({
 
         <Fab
           color="primary"
-          // sx={{ position: "fixed", bottom: 16, right: 16 }}
           sx={{ position: "absolute", bottom: 16, right: 16 }}
           onClick={() => setNewChatDialogOpen(true)}
         >
           <AddIcon />
         </Fab>
-        {/* <NewChatDialog
-          open={newChatDialogOpen}
-          onClose={() => setNewChatDialogOpen(false)}
-          onChatCreated={handleChatCreated}
-        /> */}
       </Drawer>
-
-      {/* <Fab
-        color="primary"
-        // sx={{ position: "fixed", bottom: 16, right: 16 }}
-        sx={{ position: "absolute", bottom: 16, right: 16 }}
-        onClick={() => setNewChatDialogOpen(true)}
-      >
-        <AddIcon />
-      </Fab>
-      <NewChatDialog
-        open={newChatDialogOpen}
-        onClose={() => setNewChatDialogOpen(false)}
-        onChatCreated={handleChatCreated}
-      /> */}
-
       {/* دیالوگ‌ها */}
       <NewChatDialog
         open={newChatDialogOpen}

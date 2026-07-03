@@ -42,12 +42,6 @@ interface SettingsDialogProps {
 export const SettingsDialog = ({ open, onClose }: SettingsDialogProps) => {
   const { mode, setMode } = useColorScheme();
   const queryClient = useQueryClient();
-  // const handleLogout = () => {
-  //   localStorage.removeItem("token");
-  //   toast.success("با موفقیت خارج شدید");
-  //   window.location.reload(); // یا reset کردن state اپلیکیشن
-  //   onClose();
-  // };
 
   const handleLogout = async () => {
     try {
@@ -59,9 +53,6 @@ export const SettingsDialog = ({ open, onClose }: SettingsDialogProps) => {
 
       // ۳. پیام موفقیت
       toast.success("با موفقیت خارج شدید");
-
-      // ۴. هدایت به صفحه لاگین (بدون رفرش کامل)
-      window.location.href = "/login";
     } catch (error) {
       toast.error("خطا در خروج از حساب");
     }
@@ -100,17 +91,6 @@ export const SettingsDialog = ({ open, onClose }: SettingsDialogProps) => {
           <Divider />
 
           {/* اعلان‌ها */}
-          {/* <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <Notifications />
-              </ListItemIcon>
-              <ListItemText primary="اعلان‌ها" secondary="فعال" />
-              <Switch defaultChecked color="primary" />
-            </ListItemButton>
-          </ListItem> */}
-
-          {/* اعلان‌ها (کامپوننت جدید) */}
           <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton>
               <ListItemIcon>
@@ -128,7 +108,7 @@ export const SettingsDialog = ({ open, onClose }: SettingsDialogProps) => {
           <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton>
               <ListItemIcon>
-                <TextFormat /> {/* یا هر آیکون مناسب */}
+                <TextFormat />
               </ListItemIcon>
               <ListItemText primary="سایز فونت" secondary="تنظیم اندازه متن پیام‌ها" />
             </ListItemButton>

@@ -4,14 +4,13 @@ import { fetchData } from "./api";
 import type { Call } from "../types/chat";
 import type { ApiResponse } from "../types";
 
-// Promise<Call>
 export async function startCall(
   chatId: string,
   type: "VOICE" | "VIDEO"
 ): Promise<ApiResponse<Call>> {
   return fetchData("/api/calls", { method: "POST", body: { chatId, type } });
 }
-//   Promise<void>
+
 export async function endCall(callId: string): Promise<ApiResponse<void>> {
   return fetchData(`/api/calls/${callId}/end`, { method: "PATCH" });
 }

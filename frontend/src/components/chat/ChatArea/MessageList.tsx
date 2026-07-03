@@ -6,12 +6,10 @@ import { useEffect, useRef } from "react";
 import type { Message } from "../../../types/chat";
 import { MessageItem } from "./MessageItem";
 import { useFontSize } from "../../../context/FontSizeContext";
-// import { useFontSize } from "../../../hooks/useFontSize";
 
 interface MessageListProps {
   messages: Message[];
   isLoading?: boolean;
-  // fetchNextPage: () => void;
   fetchNextPage: () => Promise<any>;
   hasNextPage: boolean;
   isFetchingNextPage: boolean;
@@ -25,15 +23,10 @@ export const MessageList = ({
   isFetchingNextPage,
 }: MessageListProps) => {
   const { fontSize } = useFontSize(); // ← فقط برای ایجاد وابستگی و رندر مجدد
-  // console.log("MessageList fontSize", fontSize);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef<HTMLDivElement>(null);
-
-  // useEffect(() => {
-  //   messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  // }, [messages]);
 
   // اسکرول به پایین برای پیام‌های جدید
   useEffect(() => {
@@ -83,14 +76,6 @@ export const MessageList = ({
     };
   }, [hasNextPage, isLoading, isFetchingNextPage, fetchNextPage]);
 
-  // if (isLoading) {
-  //   return (
-  //     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
-  //       <CircularProgress />
-  //     </Box>
-  //   );
-  // }
-
   if (isLoading && messages.length === 0) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
@@ -98,39 +83,6 @@ export const MessageList = ({
       </Box>
     );
   }
-
-  // return (
-  //   <Box
-  //     sx={{
-  //       flex: 1,
-  //       overflowY: "auto",
-  //       py: 2,
-  //       bgcolor: "background.default",
-  //       display: "flex",
-  //       flexDirection: "column",
-  //     }}
-  //   >
-  //     {messages.length === 0 ? (
-  //       <Box sx={{ textAlign: "center", mt: 4, color: "text.secondary" }}>
-  //         هیچ پیامی وجود ندارد. اولین پیام را ارسال کنید!
-  //       </Box>
-  //     ) : (
-  //       messages?.map((message, index) => {
-  //         const isPreviousSameSender =
-  //           index > 0 && messages[index - 1].senderId === message.senderId;
-  //         return (
-  //           <MessageItem
-  //             key={message.id}
-  //             message={message}
-  //             isPreviousSameSender={isPreviousSameSender}
-  //             fontSize={fontSize} // ← پاس دادن fontSize به عنوان prop
-  //           />
-  //         );
-  //       })
-  //     )}
-  //     <div ref={messagesEndRef} />
-  //   </Box>
-  // );
 
   return (
     <Box

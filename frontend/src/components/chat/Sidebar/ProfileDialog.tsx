@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 import { Close, Person, Phone, Badge, Email } from "@mui/icons-material";
 import { useQuery } from "@tanstack/react-query";
-//   import { GetMe } from "../../services/auth";
 import toast from "react-hot-toast";
 import { GetMe } from "../../../services/auth";
 
@@ -31,7 +30,6 @@ export const ProfileDialog = ({ open, onClose }: ProfileDialogProps) => {
   });
 
   const user = data?.body;
-  //   console.log("ProfileDialog user", user);
   if (isError) {
     toast.error("خطا در بارگذاری اطلاعات کاربر");
   }

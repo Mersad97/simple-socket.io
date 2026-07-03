@@ -20,10 +20,6 @@ const ChatItem = ({ chat, isSelected, onSelect }: ChatItemProps) => {
     queryFn: GetMe,
   });
   const user = data?.body;
-
-  // const chatName = chat.isGroup
-  //   ? chat.name || "گروه ناشناس"
-  //   : chat.participants[0]?.user.name || chat.participants[0]?.user.username || "کاربر";
   const chatName = chat.isGroup
     ? chat.name || "گروه ناشناس"
     : chat.participants[0]?.user.id == user.id

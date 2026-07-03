@@ -64,15 +64,8 @@ export const ChatHeader = ({ chat, isMobile, onBack, onCall }: ChatHeaderProps) 
     }
   }, [isOtherTyping]);
 
-  // const { onUserOnline, onUserOffline } = useSocket();
   useEffect(() => {
     const userOnline = onUserOnline((data) => {
-      // console.log("onUserOnline received:", data.userId);
-      // console.log(
-      //   `ChatHeader       queryClient.getQueryData(["chats"])`,
-      //   queryClient.getQueryData(["chats"])
-      // );
-
       queryClient.setQueryData<ApiResponse<ChatSummary[]>>(["chats"], (old) => {
         return {
           ...old,
@@ -95,12 +88,6 @@ export const ChatHeader = ({ chat, isMobile, onBack, onCall }: ChatHeaderProps) 
   }, [onUserOnline]);
   useEffect(() => {
     const userOffline = onUserOffline((data) => {
-      // console.log("onUserOffline received:", data.userId);
-      // console.log(
-      //   `ChatHeader       queryClient.getQueryData(["chats"])`,
-      //   queryClient.getQueryData(["chats"])
-      // );
-
       queryClient.setQueryData<ApiResponse<ChatSummary[]>>(["chats"], (old) => {
         return {
           ...old,
@@ -146,8 +133,6 @@ export const ChatHeader = ({ chat, isMobile, onBack, onCall }: ChatHeaderProps) 
   const isOnline = () => {
     if (!chat?.isGroup) {
       const otherUser = chat.participants.find((p) => p.user.id !== currentUserId);
-      // console.log("ChatHeader isOnline otherUser:", otherUser);
-      // console.log("otherUser?.user.isOnline || false", otherUser?.user.isOnline || false);
       return otherUser?.user.isOnline || false;
     }
     return false;
@@ -179,15 +164,6 @@ export const ChatHeader = ({ chat, isMobile, onBack, onCall }: ChatHeaderProps) 
         <Typography variant="subtitle1" sx={{ fontWeight: "bold" }} noWrap>
           {getDisplayName()}
         </Typography>
-
-        {/* <Typography
-          variant="caption"
-          color={isOnline() ? "success" : "error"}
-          sx={{ fontWeight: "bold" }}
-        >
-          {isOnline() ? "آنلاین" : "آفلاین"}
-        </Typography> */}
-
         <Typography variant="caption" color={statusColor} sx={{ fontWeight: "bold" }}>
           {statusText}
         </Typography>

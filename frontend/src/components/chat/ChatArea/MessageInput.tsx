@@ -4,8 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import { TextField, IconButton, Paper, Popover } from "@mui/material";
 import { Send, EmojiEmotions, AttachFile } from "@mui/icons-material";
 import EmojiPicker, { type EmojiClickData } from "emoji-picker-react";
-import { useSocket } from "../../../hooks/useSocket";
-import type { MessageType } from "../../../types/chat";
+import { useSocket } from "../../../hooks/useSocket.js";
+import type { MessageType } from "../../../types/chat.js";
 
 interface MessageInputProps {
   chatId: string;
@@ -80,17 +80,6 @@ export const MessageInput = ({ chatId, onSendMessage, isSending }: MessageInputP
     setMessage((prev) => prev + emojiData.emoji);
     setAnchorEl(null);
   };
-
-  // const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-  //   if (file) {
-  //     sendStopTyping(); // قبل از آپلود فایل، stopTyping
-  //     onSendMessage(file.name, file);
-  //   }
-  //   if (fileInputRef.current) {
-  //     fileInputRef.current.value = "";
-  //   }
-  // };
 
   // تابع تشخیص نوع فایل بر اساس MIME Type
   const getMessageTypeFromFile = (file: File): "IMAGE" | "VIDEO" | "AUDIO" | "FILE" => {
@@ -175,112 +164,3 @@ export const MessageInput = ({ chatId, onSendMessage, isSending }: MessageInputP
     </Paper>
   );
 };
-
-// // src/components/chat/ChatArea/MessageInput.tsx
-
-// import { useState, useRef } from "react";
-// import { TextField, IconButton, Paper, Popover } from "@mui/material";
-// import { Send, EmojiEmotions, AttachFile, Mic, Image, VideoCall } from "@mui/icons-material";
-// import EmojiPicker, { type EmojiClickData } from "emoji-picker-react";
-
-// interface MessageInputProps {
-//   chatId: string;
-//   onSendMessage: (content: string, file?: File) => void;
-//   isSending?: boolean;
-// }
-
-// export const MessageInput = ({ chatId, onSendMessage, isSending }: MessageInputProps) => {
-//   const [message, setMessage] = useState("");
-//   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-//   const fileInputRef = useRef<HTMLInputElement>(null);
-
-//   const handleSend = () => {
-//     if (message.trim()) {
-//       onSendMessage(message.trim());
-//       setMessage("");
-//     }
-//   };
-
-//   // ✅ تغییر به onKeyDown
-//   const handleKeyDown = (e: React.KeyboardEvent) => {
-//     if (e.key === "Enter" && !e.shiftKey) {
-//       e.preventDefault();
-//       handleSend();
-//     }
-//   };
-
-//   const handleEmojiClick = (emojiData: EmojiClickData) => {
-//     setMessage((prev) => prev + emojiData.emoji);
-//     setAnchorEl(null);
-//   };
-
-//   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     const file = event.target.files?.[0];
-//     if (file) {
-//       onSendMessage(file.name, file);
-//     }
-//     if (fileInputRef.current) {
-//       fileInputRef.current.value = "";
-//     }
-//   };
-
-//   return (
-//     <Paper
-//       sx={{
-//         p: 1,
-//         borderTop: "1px solid",
-//         borderColor: "divider",
-//         display: "flex",
-//         alignItems: "center",
-//         gap: 1,
-//         bgcolor: "background.paper",
-//       }}
-//     >
-//       <IconButton size="small" onClick={() => fileInputRef.current?.click()}>
-//         <AttachFile />
-//       </IconButton>
-//       <input
-//         type="file"
-//         ref={fileInputRef}
-//         style={{ display: "none" }}
-//         onChange={handleFileUpload}
-//         accept="image/*,audio/*,video/*"
-//       />
-//       <IconButton size="small" onClick={(e) => setAnchorEl(e.currentTarget)}>
-//         <EmojiEmotions />
-//       </IconButton>
-//       <Popover
-//         open={Boolean(anchorEl)}
-//         anchorEl={anchorEl}
-//         onClose={() => setAnchorEl(null)}
-//         anchorOrigin={{ vertical: "top", horizontal: "center" }}
-//         transformOrigin={{ vertical: "bottom", horizontal: "center" }}
-//       >
-//         <EmojiPicker onEmojiClick={handleEmojiClick} />
-//       </Popover>
-
-//       {/* ✅ استفاده از slotProps به‌جای InputProps */}
-//       <TextField
-//         fullWidth
-//         multiline
-//         maxRows={4}
-//         placeholder="پیام خود را بنویسید..."
-//         value={message}
-//         onChange={(e) => setMessage(e.target.value)}
-//         onKeyDown={handleKeyDown} // ✅ تغییر از onKeyPress
-//         variant="standard"
-//         slotProps={{
-//           input: {
-//             disableUnderline: true,
-//           },
-//         }}
-//         sx={{ flex: 1 }}
-//         disabled={isSending}
-//       />
-
-//       <IconButton color="primary" onClick={handleSend} disabled={!message.trim() || isSending}>
-//         <Send />
-//       </IconButton>
-//     </Paper>
-//   );
-// };

@@ -61,18 +61,12 @@ const ChatContainer = () => {
   });
 
   // ترکیب پیام‌ها از تمام صفحات (به‌صورت نزولی)
-  // const messages = messagesData?.pages.flatMap((page) => page.body) ?? [];
-
-  // ترکیب پیام‌ها از تمام صفحات (به‌صورت نزولی)
   const messages =
     messagesData?.pages
       .slice() // کپی برای جلوگیری از تغییر اصلی
       .reverse()
       .flatMap((page) => page.body) ?? [];
 
-  // console.log("ChatContainer messages", messages);
-  // console.log("ChatContainer messagesData?.pages", messagesData?.pages);
-  // console.log("ChatContainer messages.length", messages.length);
   // انتخاب اولین چت
   useEffect(() => {
     if (chats.length > 0 && !selectedChatId) {
@@ -85,19 +79,11 @@ const ChatContainer = () => {
   useEffect(() => {
     const NewMessageHandler = onNewMessage((newMessage: Message) => {
       try {
-        console.log(
-          "NewMessageHandler",
-          selectedChatId,
-          newMessage.chatId,
-          selectedChatId === newMessage.chatId
-        );
         if (selectedChatId === newMessage.chatId) {
           queryClient.setQueryData<InfiniteMessagesData>(["messages", selectedChatId], (old) => {
             if (!old) return old;
             const lastPage = old.pages[old.pages.length - 1];
-            console.log("lastPage", lastPage);
             if (lastPage) {
-              console.log("old in lastPage", old);
               return {
                 ...old,
                 pages: [
@@ -164,7 +150,6 @@ const ChatContainer = () => {
   useEffect(() => {
     const MessageReadHandler = onMessageRead((data) => {
       try {
-        console.log("MessageReadHandler", data);
         queryClient.setQueryData<InfiniteMessagesData>(["messages", data.chatId], (old) => {
           if (!old) return old;
           return {
@@ -307,242 +292,3 @@ const ChatContainer = () => {
 };
 
 export default ChatContainer;
-
-// // frontend/src/components/chat/ChatContainer.tsx
-
-// import { useState, useEffect, useCallback } from "react";
-// import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
-// import { Box, useMediaQuery, type Theme } from "@mui/material";
-// import { getChats, getMessages } from "../../services/chat";
-// import { useSocket } from "../../hooks/useSocket";
-// import type { ChatSummary, Message, MessageStatus } from "../../types/chat";
-// import Sidebar from "./Sidebar/Sidebar";
-// import { ChatArea } from "./ChatArea/ChatArea";
-// import EmptyState from "./EmptyState";
-// import type { ApiResponse } from "../../types";
-// import { sendNotification } from "../../services/notificationService";
-
-// const ChatContainer = () => {
-//   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
-//   const [showMobileChat, setShowMobileChat] = useState(false);
-
-//   const { socket, isConnected, onNewMessage, onMessageRead } = useSocket();
-//   const queryClient = useQueryClient();
-//   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down("sm"));
-
-//   useEffect(() => {
-//     socket.connect();
-//   }, []);
-
-//   // دریافت لیست چت‌ها
-//   const { data: chatsResponse, isLoading: chatsLoading } = useQuery({
-//     queryKey: ["chats"],
-//     queryFn: getChats,
-//     staleTime: 60000,
-//     placeholderData: (previousData) => previousData,
-//   });
-
-//   const chats = chatsResponse?.body ?? [];
-
-//   دریافت پیام‌های چت انتخاب‌شده
-//   const { data: messagesResponse } = useQuery({
-//     queryKey: ["messages", selectedChatId],
-//     queryFn: () => getMessages(selectedChatId!),
-//     enabled: !!selectedChatId,
-//     placeholderData: (previousData) => previousData,
-//   });
-
-//   const messages = messagesResponse?.body ?? [];
-
-//   // انتخاب اولین چت
-//   useEffect(() => {
-//     if (chats.length > 0 && !selectedChatId) {
-//       setSelectedChatId(chats[0].id);
-//       if (isMobile) setShowMobileChat(false);
-//     }
-//   }, [chats, selectedChatId, isMobile]);
-
-//   // ========== گوش دادن به پیام‌های جدید ==========
-//   useEffect(() => {
-//     const NewMessageHandler = onNewMessage((newMessage: Message) => {
-//       // اگر کاربر در همان چت است، فقط پیام را به لیست اضافه کن
-//       if (selectedChatId === newMessage.chatId) {
-//         queryClient.setQueryData<ApiResponse<Message[]>>(["messages", selectedChatId], (old) => {
-//           if (!old) return old;
-//           return {
-//             ...old,
-//             body: [...(old.body ?? []), newMessage],
-//           };
-//         });
-//       } else {
-//         // در غیر این صورت، unreadCount را افزایش بده
-//         queryClient.setQueryData<ApiResponse<ChatSummary[]>>(["chats"], (old) => {
-//           if (!old?.body) return old;
-//           return {
-//             ...old,
-//             body: old.body.map((chat) =>
-//               chat.id === newMessage.chatId
-//                 ? {
-//                     ...chat,
-//                     lastMessage: newMessage,
-//                     updatedAt: new Date(),
-//                     unreadCount: (chat.unreadCount ?? 0) + 1,
-//                   }
-//                 : chat
-//             ),
-//           };
-//         });
-
-//         // اگر کاربر در چت نیست، اعلان بفرست
-//         const senderName = newMessage.sender.name || newMessage.sender.username;
-//         sendNotification(`پیام جدید از ${senderName}`, {
-//           body:
-//             newMessage.messageType === "TEXT" ? newMessage.content : `[${newMessage.messageType}]`,
-//           tag: newMessage.chatId,
-//         });
-//       }
-
-//       // به‌روزرسانی lastMessage در لیست چت‌ها (برای همه چت‌ها)
-//       queryClient.setQueryData<ApiResponse<ChatSummary[]>>(["chats"], (old) => {
-//         if (!old?.body) return old;
-//         return {
-//           ...old,
-//           body: old.body.map((chat) =>
-//             chat.id === newMessage.chatId
-//               ? { ...chat, lastMessage: newMessage, updatedAt: new Date() }
-//               : chat
-//           ),
-//         };
-//       });
-//     });
-
-//     return () => {
-//       NewMessageHandler();
-//     };
-//   }, [onNewMessage, queryClient, selectedChatId]);
-
-//   // ========== گوش دادن به رویداد خوانده شدن پیام ==========
-//   useEffect(() => {
-//     const MessageReadHandler = onMessageRead((data) => {
-//       // به‌روزرسانی وضعیت پیام در لیست پیام‌ها
-//       queryClient.setQueryData<ApiResponse<Message[]>>(["messages", data.chatId], (old) => {
-//         if (!old?.body) return old;
-//         return {
-//           ...old,
-//           body: old.body.map((msg) =>
-//             msg.id === data.messageId
-//               ? { ...msg, status: "READ" as MessageStatus, readAt: new Date() }
-//               : msg
-//           ),
-//         };
-//       });
-
-//       // به‌روزرسانی lastMessage در لیست چت‌ها (اگر همان پیام باشد)
-//       queryClient.setQueryData<ApiResponse<ChatSummary[]>>(["chats"], (old) => {
-//         if (!old?.body) return old;
-//         return {
-//           ...old,
-//           body: old.body.map((chat) => {
-//             if (chat.id === data.chatId && chat.lastMessage?.id === data.messageId) {
-//               return {
-//                 ...chat,
-//                 lastMessage: {
-//                   ...chat.lastMessage,
-//                   status: "READ" as MessageStatus,
-//                 },
-//               };
-//             }
-//             return chat;
-//           }),
-//         };
-//       });
-//     });
-
-//     return () => {
-//       MessageReadHandler();
-//     };
-//   }, [onMessageRead, queryClient]);
-
-//   // ========== انتخاب چت ==========
-//   const handleSelectChat = useCallback(
-//     (chatId: string) => {
-//       setSelectedChatId(chatId);
-//       if (isMobile) setShowMobileChat(true);
-
-//       // صفر کردن unreadCount برای چت انتخاب‌شده
-//       queryClient.setQueryData<ApiResponse<ChatSummary[]>>(["chats"], (old) => {
-//         if (!old?.body) return old;
-//         return {
-//           ...old,
-//           body: old.body.map((chat) => (chat.id === chatId ? { ...chat, unreadCount: 0 } : chat)),
-//         };
-//       });
-//     },
-//     [isMobile, queryClient]
-//   );
-
-//   const handleBackFromChat = useCallback(() => {
-//     setShowMobileChat(false);
-//   }, []);
-
-//   const handleChatCreated = useCallback(
-//     (chatId: string) => {
-//       setSelectedChatId(chatId);
-//       if (isMobile) setShowMobileChat(true);
-//     },
-//     [isMobile]
-//   );
-
-//   const chat = chats?.find((c) => c.id === selectedChatId);
-
-//   if (chatsLoading) {
-//     return (
-//       <Box
-//         sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}
-//       >
-//         در حال بارگذاری چت‌ها...
-//       </Box>
-//     );
-//   }
-
-//   // حالت موبایل
-//   if (isMobile) {
-//     return (
-//       <Box sx={{ display: "flex", height: "100vh", bgcolor: "background.default" }}>
-//         {!showMobileChat ? (
-//           <Sidebar
-//             chats={chats}
-//             selectedChatId={selectedChatId}
-//             onSelectChat={handleSelectChat}
-//             isConnected={isConnected}
-//             handleChatCreated={handleChatCreated}
-//           />
-//         ) : selectedChatId && chat ? (
-//           <ChatArea chat={chat} messages={messages} socket={socket} onBack={handleBackFromChat} />
-//         ) : (
-//           <EmptyState />
-//         )}
-//       </Box>
-//     );
-//   }
-
-//   // حالت دسکتاپ
-//   return (
-//     <Box sx={{ display: "flex", height: "100vh", bgcolor: "background.default" }}>
-//       <Sidebar
-//         chats={chats}
-//         selectedChatId={selectedChatId}
-//         onSelectChat={handleSelectChat}
-//         isConnected={isConnected}
-//         handleChatCreated={handleChatCreated}
-//       />
-//       {selectedChatId && chat ? (
-//         <ChatArea chat={chat} messages={messages} socket={socket} />
-//       ) : (
-//         <EmptyState />
-//       )}
-//     </Box>
-//   );
-// };
-
-// export default ChatContainer;

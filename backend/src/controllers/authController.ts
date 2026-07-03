@@ -38,8 +38,6 @@ export const login = async (req: Request, res: Response) => {
       sameSite: "strict",
       maxAge: 15 * 24 * 60 * 60 * 1000,
     });
-
-    // return res.success("ok", { token });
     return res.success("ok");
   } catch (error: any) {
     logger.error(`خطا در login: ${error?.message ?? error}`, { stack: error?.stack });
@@ -58,25 +56,15 @@ export const register = async (req: Request, res: Response) => {
       },
     });
     if (oldUser) {
-      // console.log("oldUser", oldUser);
       return res.fail("use another phone number or username!");
     }
     const user = await prisma.user.create({
       data: { phone, name, username, password: hashedPassword },
     });
-    // const token = jwt.sign(
-    //   { id: user.id, phone: user.phone },
-    //   process.env.JWT_SECRET as string,
-    //   {
-    //     expiresIn: "30d",
-    //   }
-    // );
-    // res.success("registered successfully. wait for active your account or call to admin", { name: user.name, phone: user.phone, token });
     return res.success("registered successfully. wait for active your account or call to admin", {
       name: user.name,
       phone: user.phone,
     });
-    // return;
   } catch (error: any) {
     logger.error(`خطا در register: ${error?.message ?? error}`, { stack: error?.stack });
     const parsed = parseDBError(error);
@@ -84,9 +72,6 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-/**
- * getUserMe
- */
 export const getUserMe = async (req: Request, res: Response) => {
   try {
     const user = req.user as any;
@@ -107,9 +92,8 @@ export const getUserMe = async (req: Request, res: Response) => {
   }
 };
 
-// backend/src/controller/authController.ts
 
-// اضافه کردن تابع logout
+
 export const logout = async (req: Request, res: Response) => {
   try {
     // پاک کردن کوکی

@@ -28,27 +28,11 @@ export async function getMessages(
   return fetchData(`/api/chats/${chatId}/messages?page=${page}&limit=${limit}`, { method: "GET" });
 }
 
-// جدید: ایجاد چت خصوصی
-// Promise<ChatSummary>
+// : ایجاد چت خصوصی
 export async function createPrivateChat(targetUserId: string): Promise<ApiResponse<ChatSummary>> {
   return fetchData("/api/chats", { method: "POST", body: { targetUserId } });
 }
 
-// Promise<Message>
-// export async function sendMessage(payload: SendMessagePayload): Promise<ApiResponse<Message>> {
-//   const formData = new FormData();
-//   formData.append("chatId", payload.chatId);
-//   formData.append("content", payload.content);
-//   formData.append("messageType", payload.messageType || "TEXT");
-//   if (payload.file) {
-//     formData.append("file", payload.file);
-//   }
-//   return fetchData("/api/messages", {
-//     method: "POST",
-//     body: formData,
-//     headers: undefined, // اجازه می‌دهیم fetchData از Content-Type چندبخشی استفاده نکند
-//   });
-// }
 export async function sendMessage(payload: SendTextMessagePayload): Promise<ApiResponse<Message>> {
   return fetchData("/api/messages", { method: "POST", body: { ...payload } });
 }
@@ -57,7 +41,7 @@ export async function markMessageAsRead(messageId: string): Promise<void> {
   return fetchData(`/api/messages/${messageId}/read`, { method: "PATCH" });
 }
 
-// جدید: جستجوی کاربران
+// : جستجوی کاربران
 export async function searchUsers(query: string): Promise<ApiResponse<User[]>> {
   return fetchData(`/api/users/search?q=${encodeURIComponent(query)}`, { method: "GET" });
 }

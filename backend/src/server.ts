@@ -1,7 +1,5 @@
 // backend/src/server.ts
-import path from "path";
 import { createServer } from "http";
-import { Server } from "socket.io";
 
 import dotenv from "dotenv";
 import express from "express";
@@ -9,6 +7,7 @@ import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
 import cookieParser from "cookie-parser";
+import { Server } from "socket.io";
 
 import authRoutes from "./routes/authRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
@@ -89,13 +88,8 @@ app.use((err: any, _req: express.Request, res: express.Response, _next: express.
   res.status(status).json({ message });
 });
 
-// بعد از ایجاد io:
 app.set("io", io);
-
-// console.log("before setupSockets(io);");
-// Socket.IO
 setupSockets(io);
-// console.log("after setupSockets(io);");
 
 const PORT = process.env.PORT || 4000;
 

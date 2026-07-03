@@ -5,7 +5,6 @@ import { type AuthSocket, socketAuthMiddleware } from "./socketAuth.js";
 import { prisma } from "../prismaDB/client.js";
 import logger from "../utils/logger.js";
 import type { MessageType } from "../../generated/prisma/enums.js";
-// import { MessageType } from "@prisma/client";
 
 export const setupSockets = (io: Server) => {
   // استفاده از میان‌افزار احراز هویت
@@ -104,13 +103,9 @@ export const setupSockets = (io: Server) => {
               senderId: userId,
               content,
               messageType,
-              // fileUrl,
               ...(fileUrl ? { fileUrl } : {}),
-              // fileName,
               ...(fileName ? { fileName } : {}),
-              // mimeType,
               ...(mimeType ? { mimeType } : {}),
-              // fileSize,
               ...(fileSize ? { fileSize } : {}),
               status: "SENT",
             },

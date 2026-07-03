@@ -83,12 +83,12 @@ chat-app/
 │ │ └── ... # سایر ماژول‌ها
 │ └── package.json
 └── frontend/
-├── src/
-│ ├── components/ # کامپوننت‌های React (چت، نوار ابزار، ...)
-│ ├── hooks/ # هوک‌های سفارشی (مثلاً useWebSocket)
-│ ├── types/ # تعاریف تایپ‌های تایپ‌اسکریپت
-│ └── src/App.tsx
-└── package.json
+  ├── src/
+  │ ├── components/ # کامپوننت‌های React (چت، نوار ابزار، ...)
+  │ ├── hooks/ # هوک‌های سفارشی (مثلاً useWebSocket)
+  │ ├── types/ # تعاریف تایپ‌های تایپ‌اسکریپت
+  │ └── src/App.tsx
+  └── package.json
 
 ```
 

@@ -1,5 +1,6 @@
 // src/components/chat/Sidebar/NotificationSettings.tsx
 
+import { useState } from "react";
 import {
   Box,
   Switch,
@@ -12,8 +13,6 @@ import {
   Stack,
   Collapse,
 } from "@mui/material";
-import { useNotification } from "../../../hooks/useNotification";
-import { useState } from "react";
 import {
   NotificationsActive,
   NotificationsOff,
@@ -21,6 +20,7 @@ import {
   Vibration,
   TextFields,
 } from "@mui/icons-material";
+import { useNotification } from "../../../hooks/useNotification";
 
 export const NotificationSettings = () => {
   const { settings, permission, requestPermission, updateSettings, sendTestNotification } =
@@ -90,7 +90,6 @@ export const NotificationSettings = () => {
           <Switch checked={settings.enabled} onChange={handleToggleEnabled} color="primary" />
         }
         label={
-          //   <Box display="flex" alignItems="center" gap={1}>
           <Box sx={{ display: "flex", alignItems: "center", gap: "1" }}>
             {settings.enabled ? (
               <NotificationsActive color="primary" />
@@ -116,7 +115,6 @@ export const NotificationSettings = () => {
             />
           }
           label={
-            // <Box display="flex" alignItems="center" gap={1}>
             <Box sx={{ display: "flex", alignItems: "center", gap: "1" }}>
               <VolumeUp fontSize="small" />
               <Typography variant="body2">صدای اعلان</Typography>
@@ -133,7 +131,6 @@ export const NotificationSettings = () => {
             />
           }
           label={
-            // <Box display="flex" alignItems="center" gap={1}>
             <Box sx={{ display: "flex", alignItems: "center", gap: "1" }}>
               <Vibration fontSize="small" />
               <Typography variant="body2">
@@ -153,7 +150,6 @@ export const NotificationSettings = () => {
             />
           }
           label={
-            // <Box display="flex" alignItems="center" gap={1}>
             <Box sx={{ display: "flex", alignItems: "center", gap: "1" }}>
               <TextFields fontSize="small" />
               <Typography variant="body2">نمایش متن پیام در اعلان</Typography>
@@ -185,7 +181,6 @@ export const NotificationSettings = () => {
             value={settings.quietHours.start}
             onChange={(e) => handleQuietHoursChange("start", e.target.value)}
             disabled={!settings.quietHours.enabled || !settings.enabled}
-            // InputLabelProps={{ shrink: true }}
             slotProps={{ inputLabel: { shrink: true } }}
             sx={{}}
           />
@@ -196,7 +191,6 @@ export const NotificationSettings = () => {
             value={settings.quietHours.end}
             onChange={(e) => handleQuietHoursChange("end", e.target.value)}
             disabled={!settings.quietHours.enabled || !settings.enabled}
-            // InputLabelProps={{ shrink: true }}
             slotProps={{ inputLabel: { shrink: true } }}
           />
         </Stack>

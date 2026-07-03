@@ -29,15 +29,3 @@ const router = Router();
 router.post("/", protect, upload.single("file"), validate({ body: uploadSchema }), uploadMedia);
 
 export default router;
-
-// // backend/src/routes/uploadRoutes.ts
-
-// import { Router } from "express";
-// import { protect } from "../middleware/authMiddleware.js";
-// import { uploadFile, handleUpload } from "../controllers/uploadController.js";
-
-// const router = Router();
-
-// router.post("/", protect, uploadFile, handleUpload);
-
-// export default router;

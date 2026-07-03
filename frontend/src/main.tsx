@@ -14,7 +14,6 @@ import { ThemeProvider, createTheme } from "@mui/material";
 import { FontSizeProvider } from "./context/FontSizeContext.tsx";
 const theme = createTheme({
   // cssVariables: true,
-  // defaultMode: "system", // <- اضافه کنید
   colorSchemes: {
     light: true,
     dark: true,

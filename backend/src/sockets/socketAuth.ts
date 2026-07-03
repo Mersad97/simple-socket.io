@@ -13,12 +13,7 @@ export interface AuthSocket extends Socket {
 }
 
 export const socketAuthMiddleware = async (socket: AuthSocket, next: (err?: Error) => void) => {
-  // console.log("socketAuthMiddleware");
   try {
-    // // استخراج توکن از کوکی یا هدر
-    // const token =
-    //   socket.handshake.auth?.token || socket.handshake.headers?.authorization?.split(" ")[1];
-
     // 1. استخراج توکن از auth (ارسال شده توسط کلاینت)
     let token =
       socket.handshake.auth?.token || socket.handshake.headers?.authorization?.split(" ")[1];

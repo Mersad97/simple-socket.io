@@ -10,7 +10,6 @@ export const FontSizeSettings = () => {
 
   // State محلی برای مقدار موقت
   const [localSize, setLocalSize] = useState(fontSize);
-  //   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // هماهنگ‌سازی localSize با fontSize (برای زمانی که از جای دیگر تغییر کند)
@@ -93,49 +92,3 @@ export const FontSizeSettings = () => {
     </Box>
   );
 };
-
-// // src/components/chat/Sidebar/FontSizeSettings.tsx
-
-// import { Box, Typography, IconButton, Slider, Button } from "@mui/material";
-// import { Add, Remove, Refresh } from "@mui/icons-material";
-// import { useFontSize } from "../../../context/FontSizeContext";
-// // import { useFontSize } from "../../../hooks/useFontSize";
-
-// export const FontSizeSettings = () => {
-//   const { fontSize, updateFontSize, increaseFontSize, decreaseFontSize, resetFontSize } =
-//     useFontSize();
-
-//   return (
-//     <Box>
-//       <Typography variant="subtitle2" gutterBottom>
-//         اندازه فونت پیام‌ها
-//       </Typography>
-//       {/* <Box display="flex" alignItems="center" gap={2}> */}
-//       <Box sx={{ display: "flex", alignItems: "center", gap: "2" }}>
-//         <IconButton size="small" onClick={decreaseFontSize} disabled={fontSize <= 12}>
-//           <Remove />
-//         </IconButton>
-//         <Slider
-//           value={fontSize}
-//           onChange={(_, value) => updateFontSize(value as number)}
-//           min={12}
-//           max={28}
-//           step={1}
-//           valueLabelDisplay="auto"
-//           valueLabelFormat={(value) => `${value}px`}
-//           sx={{ flex: 1 }}
-//         />
-//         <IconButton size="small" onClick={increaseFontSize} disabled={fontSize >= 28}>
-//           <Add />
-//         </IconButton>
-//         <Button size="small" startIcon={<Refresh />} onClick={resetFontSize}>
-//           بازنشانی
-//         </Button>
-//       </Box>
-//       {/* <Typography variant="caption" color="text.secondary" display="block" mt={1}> */}
-//       <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mt: 1 }}>
-//         سایز فعلی: {fontSize}px
-//       </Typography>
-//     </Box>
-//   );
-// };

@@ -15,8 +15,5 @@ export async function uploadMessage(payload: SendMessagePayload): Promise<ApiRes
   return fetchData("/api/upload", {
     method: "POST",
     body: formData,
-    // headers: undefined, // اجازه می‌دهیم fetchData از Content-Type چندبخشی استفاده نکند
-
-    // حذف header Content-Type تا مرورگر خودش آن را با boundary تنظیم کند
   });
 }

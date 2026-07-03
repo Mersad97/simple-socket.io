@@ -25,13 +25,13 @@ export const getFile = async (req: Request, res: Response) => {
     if (typeof filename !== "string" || filename.length === 0) {
       return res.fail("Invalid filename", 400);
     }
-    // console.log("filename", filename);
+
     // حالا filename قطعاً از نوع string است
     const message = await prisma.message.findFirst({
       where: { fileUrl: { endsWith: filename } },
       select: { chatId: true, fileUrl: true },
     });
-    // console.log("message", message);
+
     if (!message || !message.fileUrl) {
       return res.fail("File not found", 404);
     }
@@ -43,26 +43,20 @@ export const getFile = async (req: Request, res: Response) => {
     if (!participant) {
       return res.fail("Access denied", 403);
     }
-    // console.log("participant", participant);
 
     // ۳. ساخت مسیر کامل فایل از روی fileUrl ذخیره‌شده در دیتابیس
     //    fileUrl مثلاً "/uploads/2026/07/1783070015098-tgyjuty.jpg" است
     const filePath = path.join(process.cwd(), message.fileUrl);
-    // const filePath = path.join(process.cwd(), "uploads", filename);
-    // console.log("filePath", filePath);
 
     if (!fs.existsSync(filePath)) {
       return res.fail("File not found", 404);
     }
 
-    // return res.sendFile(filePath);
-    // console.log("mimeType");
     // تنظیم هدرهای امنیتی و کش
     const mimeType = getMimeType(filename);
     res.setHeader("Content-Type", mimeType);
     res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
     res.setHeader("X-Content-Type-Options", "nosniff");
-    // res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
     res.setHeader(
       "Cross-Origin-Resource-Policy",
       process.env.NODE_ENV == "production" ? "same-site" : "cross-origin"
@@ -71,9 +65,9 @@ export const getFile = async (req: Request, res: Response) => {
     res.sendFile(filePath, (err) => {
       if (err) {
         logger.error(`Error sending file: ${err.message}`);
-        // if (!res.headersSent) {
-        //   res.fail("Error serving file", 500);
-        // }
+        if (!res.headersSent) {
+          res.fail("Error serving file", 500);
+        }
       }
     });
     return;

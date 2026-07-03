@@ -14,7 +14,6 @@ type FetchOptions = {
   body?: Record<string, unknown> | FormData | null;
   responseType?: "json" | "blob" | "text";
   headers?: HeadersInit;
-  //   next?: RequestInit["next"];
   cache?: RequestInit["cache"];
   skipAuth?: boolean; // اگر true باشد، توکن ارسال نمی‌شود (مثلا برای لاگین اولیه)
 };
@@ -97,7 +96,6 @@ export async function fetchData<T>(endpoint: string, options: FetchOptions = {})
     headers,
     credentials: "include",
     body: fetchBody,
-    // next,
     cache,
   });
 

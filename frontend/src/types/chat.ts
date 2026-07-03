@@ -7,12 +7,6 @@ export type MessageStatus = "SENT" | "DELIVERED" | "READ";
 export type CallType = "VOICE" | "VIDEO";
 export type CallStatus = "MISSED" | "ACCEPTED" | "REJECTED" | "ENDED";
 
-// export enum MessageStatus {
-//   SENT = "SENT",
-//   DELIVERED = "DELIVERED",
-//   READ = "READ",
-// }
-
 export interface User {
   id: string;
   phone: string;
