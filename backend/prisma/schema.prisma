@@ -1,0 +1,136 @@
+// backend/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+model User {
+  id            String    @id @default(uuid())
+  phone         String    @unique
+  name          String?
+  avatar        String?
+  bio           String?   @db.Text
+  lastSeen      DateTime  @default(now())
+  isOnline      Boolean   @default(false)
+  isActive      Boolean   @default(false)
+  role          UserRole  @default(USER)
+  username      String    @unique
+  password      String  
+  profileImage  String?
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime? 
+
+  groupParticipants     GroupParticipant[]
+  messages              Message[]
+  callsAsCaller         Call[] @relation("Caller")
+  callsAsReceiver       Call[] @relation("Receiver")
+}
+
+
+
+model Chat {
+  id            String   @id @default(uuid())
+  isGroup       Boolean  @default(false)
+  name          String?  // فقط برای گروه
+  avatar        String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  participants  GroupParticipant[]
+  messages      Message[]
+  call          Call[]
+  adminId       String?   // برای گروه اصلی
+}
+
+model GroupParticipant {
+  id            String      @id @default(uuid())
+  chatId        String
+  userId        String
+  role          GroupRole   @default(MEMBER)
+  joinedAt      DateTime    @default(now())
+
+  chat          Chat        @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([chatId, userId])
+}
+
+enum GroupRole {
+  ADMIN
+  MEMBER
+}
+
+model Message {
+  id            String        @id @default(uuid())
+  chatId        String
+  senderId      String
+  content       String?       @db.Text
+  messageType   MessageType   @default(TEXT)
+  fileUrl       String?
+  fileName      String?
+  mimeType      String?
+  thumbnailUrl  String?
+  status        MessageStatus @default(SENT)
+  createdAt     DateTime      @default(now())
+  readAt        DateTime?
+  chat          Chat          @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  sender        User          @relation( fields: [senderId], references: [id])
+  deliveredTo   Json?   // برای تحویل پیام
+  fileSize      Int?
+}
+
+
+enum MessageType {
+  TEXT
+  IMAGE
+  AUDIO
+  VIDEO
+  FILE
+}
+
+enum MessageStatus {
+  SENT
+  DELIVERED
+  READ
+}
+
+model Call {
+  id          String      @id @default(uuid())
+  chatId      String
+  callerId    String
+  receiverId  String
+  type        CallType
+  status      CallStatus
+  startedAt   DateTime?
+  endedAt     DateTime?
+  duration    Int?        // in seconds
+
+  chat        Chat        @relation(fields: [chatId], references: [id])
+  caller      User        @relation("Caller", fields: [callerId], references: [id])
+  receiver    User        @relation("Receiver", fields: [receiverId], references: [id])
+}
+
+enum CallType {
+  VOICE
+  VIDEO
+}
+
+enum CallStatus {
+  MISSED
+  ACCEPTED
+  REJECTED
+  ENDED
+}
