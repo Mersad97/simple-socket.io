@@ -1,25 +1,14 @@
 // src/services/chat.ts
 
 import { fetchData } from "./api";
-import type {
-  ChatSummary,
-  Message,
-  SendMessagePayload,
-  SendTextMessagePayload,
-  User,
-} from "../types/chat";
+import type { ChatSummary, Message, SendTextMessagePayload, User } from "../types/chat";
 import type { ApiResponse } from "../types";
 import { socket } from "../socket";
 
-// src/services/chat.ts
-
-// import { socket } from "../socket";
-
-// Promise<ChatSummary[]>
 export async function getChats(): Promise<ApiResponse<ChatSummary[]>> {
   return fetchData("/api/chats", { method: "GET" });
 }
-// Promise<Message[]>
+
 export async function getMessages(
   chatId: string,
   page = 1,

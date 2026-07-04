@@ -119,7 +119,7 @@ const ChatContainer = () => {
           sendNotification(`پیام جدید از ${senderName}`, {
             body:
               newMessage.messageType === "TEXT"
-                ? newMessage.content
+                ? newMessage.content || ""
                 : `[${newMessage.messageType}]`,
             tag: newMessage.chatId,
           });

@@ -16,8 +16,9 @@ interface MessageItemProps {
   fontSize: number; // ← اضافه کردن prop
 }
 const backend_url = import.meta.env.VITE_BACKEND_URL;
-const getFileUrl = (fileUrl: string | null) => {
-  if (!fileUrl) return null;
+const getFileUrl = (fileUrl: string | null): string => {
+  // if (!fileUrl) return null;
+  if (!fileUrl) return "";
   // استخراج نام فایل از مسیر قدیمی
   const filename = fileUrl.split("/").pop();
   return `${backend_url}/api/files/${filename}`;

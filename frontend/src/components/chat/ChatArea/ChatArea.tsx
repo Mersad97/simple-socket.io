@@ -43,7 +43,8 @@ export const ChatArea = ({
 
         // اگر فایل وجود دارد، از مسیر آپلود استفاده کن
         if (file) {
-          const result = await uploadMessage({
+          // const result =
+          await uploadMessage({
             chatId: chat.id,
             content,
             messageType: messageType || "FILE",

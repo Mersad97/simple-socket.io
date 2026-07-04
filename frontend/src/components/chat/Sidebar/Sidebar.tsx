@@ -68,8 +68,8 @@ const Sidebar = ({
         chat?.name?.toLowerCase().includes(lowerTerm) ||
         chat.participants?.some(
           (p) =>
-            p.user.name.toLowerCase().includes(lowerTerm) ||
-            p.user.username.toLowerCase().includes(lowerTerm)
+            p?.user?.name?.toLowerCase().includes(lowerTerm) ||
+            p?.user?.username?.toLowerCase().includes(lowerTerm)
         )
     );
   }, [chats, searchTerm]);

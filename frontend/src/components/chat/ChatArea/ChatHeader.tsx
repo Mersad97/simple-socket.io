@@ -67,6 +67,7 @@ export const ChatHeader = ({ chat, isMobile, onBack, onCall }: ChatHeaderProps) 
   useEffect(() => {
     const userOnline = onUserOnline((data) => {
       queryClient.setQueryData<ApiResponse<ChatSummary[]>>(["chats"], (old) => {
+        if (!old) return old; // or return undefined
         return {
           ...old,
           body:
@@ -89,6 +90,7 @@ export const ChatHeader = ({ chat, isMobile, onBack, onCall }: ChatHeaderProps) 
   useEffect(() => {
     const userOffline = onUserOffline((data) => {
       queryClient.setQueryData<ApiResponse<ChatSummary[]>>(["chats"], (old) => {
+        if (!old) return old; // or return undefined
         return {
           ...old,
           body:

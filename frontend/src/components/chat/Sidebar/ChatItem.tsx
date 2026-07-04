@@ -22,7 +22,7 @@ const ChatItem = ({ chat, isSelected, onSelect }: ChatItemProps) => {
   const user = data?.body;
   const chatName = chat.isGroup
     ? chat.name || "گروه ناشناس"
-    : chat.participants[0]?.user.id == user.id
+    : chat.participants[0]?.user.id == user?.id
     ? chat.participants[1]?.user.name || chat.participants[1]?.user.username || "کاربر"
     : chat.participants[0]?.user.name || chat.participants[0]?.user.username || "کاربر";
 

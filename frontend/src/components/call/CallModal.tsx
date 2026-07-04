@@ -2,7 +2,7 @@
 // src/components/call/CallModal.tsx
 
 import { useState, useEffect, useRef } from "react";
-import { Modal, Box, Typography, IconButton, Avatar, LinearProgress } from "@mui/material";
+import { Modal, Box, Typography, IconButton, Avatar } from "@mui/material";
 import {
   CallEnd,
   Mic,
